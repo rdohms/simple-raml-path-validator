@@ -2,7 +2,6 @@
 
 namespace DMS\Raml\PathValidator\Tests;
 
-use Symfony\Component\Yaml\Yaml;
 use DMS\Raml\PathValidator\Validator;
 
 /**
@@ -19,19 +18,12 @@ class DefinitionReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Validator
      */
-    protected $reader;
+    protected static $reader;
 
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        self::$rawRaml = Yaml::parse(file_get_contents(__DIR__ . '/samples/sample.raml'));
-    }
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->reader = new Validator(self::$rawRaml);
-
+        self::$reader = Validator::forRamlFile(__DIR__ . '/samples/sample.raml');
     }
 
     /**
@@ -44,7 +36,7 @@ class DefinitionReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsPathDefined($method, $path, $expectedResult)
     {
-        self::assertEquals($expectedResult, $this->reader->isValidDefinedPath($method, $path));
+        self::assertEquals($expectedResult, self::$reader->isValidDefinedPath($method, $path));
     }
 
     /**
@@ -64,6 +56,8 @@ class DefinitionReaderTest extends \PHPUnit_Framework_TestCase
             'mixed params with extra'          => ['POST', '/v2/{id}/{name}/reset', true],
             'invalid verb'                     => ['PUT', '/', false],
             'invalid verb, depth > 1'          => ['PUT', '/v2/setting/preference/{id}', false],
+            'invalid path'                     => ['GET', '/v2/something/not-here/{id}', false],
+            'invalid path, with valid partial' => ['GET', '/v2/user/not-here/{id}', false],
         ];
     }
 }

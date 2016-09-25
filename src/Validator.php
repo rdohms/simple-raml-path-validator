@@ -2,7 +2,9 @@
 
 namespace DMS\Raml\PathValidator;
 
+use DMS\Raml\PathValidator\Exception\FileNotFound;
 use DMS\Raml\PathValidator\Exception\InvalidMethodException;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Validator
@@ -57,7 +59,7 @@ class Validator
      * @param string $path
      * @param array  $ramlDefinition
      *
-     * @return mixed|null
+     * @return array
      */
     protected function resolvePathPart($path, array $ramlDefinition)
     {
@@ -66,7 +68,6 @@ class Validator
         } else {
             $parts = explode('/', $path);
         }
-
 
         $iMax = count($parts);
         for ($i = 0; $i < $iMax; $i++) {
@@ -78,9 +79,8 @@ class Validator
                 $x--;
             }
 
-
             if (array_key_exists($current, $ramlDefinition)) {
-                if ($i == count($parts) - 1) {
+                if ($i === count($parts) - 1) {
                     return $ramlDefinition[$current];
                 } else {
                     return $this->resolvePathPart(
@@ -91,6 +91,23 @@ class Validator
             }
         }
 
-        return null;
+        return [];
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return static
+     * @throws FileNotFound
+     */
+    public static function forRamlFile($file)
+    {
+
+        if (file_exists($file) === false) {
+            throw FileNotFound::withPath($file);
+        }
+
+        $content = Yaml::parse(file_get_contents($file));
+        return new static($content);
     }
 }
