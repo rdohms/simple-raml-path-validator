@@ -1,0 +1,29 @@
+#%RAML 1.0
+title: Usabilla Internal API
+version: v1
+baseUri: http://api.usabilla.dev
+
+/:
+  get:
+  post:
+
+/v2:
+    /user:
+        get:
+        /{id}:
+            get:
+            post:
+    /account/email:
+        /{email}:
+            get:
+            post:
+    /setting/preference:
+        get:
+        /{id}:
+            get:
+            post:
+    /{id}/{name}:
+        get:
+        /reset:
+            post:
+            put:

@@ -1,0 +1,27 @@
+{
+    "name": "dms/simple-raml-path-validator",
+    "description": "Verify that your routes are defined in a RAML API spec.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rafael Dohms",
+            "email": "rdohms@gmail.com"
+        }
+    ],
+    
+    "require": {
+        "symfony/yaml": "^2.8 | ^3.1"
+    },
+    
+    "require-dev": {
+        "phpunit/phpunit": "^5.5"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "DMS\\Raml\\PathValidator\\": "src/",
+            "DMS\\Raml\\PathValidator\\Tests\\": "tests/"
+        }
+    }
+}
