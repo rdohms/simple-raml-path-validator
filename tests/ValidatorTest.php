@@ -5,9 +5,9 @@ namespace DMS\Raml\PathValidator\Tests;
 use DMS\Raml\PathValidator\Validator;
 
 /**
- * Class DefinitionReaderTest
+ * Class ValidatorTest
  */
-class DefinitionReaderTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
 
     /**

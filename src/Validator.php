@@ -56,35 +56,28 @@ class Validator
     }
 
     /**
-     * @param string $path
+     * @param string $pathString
      * @param array  $ramlDefinition
      *
      * @return array
+     * @internal param string $path
      */
-    protected function resolvePathPart($path, array $ramlDefinition)
+    protected function resolvePathPart($pathString, array $ramlDefinition)
     {
-        if ($path[0] === '/') {
-            $parts = explode('/', substr($path, 1));
-        } else {
-            $parts = explode('/', $path);
-        }
+        $path = Path::fromString($pathString);
 
+        $parts = $path->getParts();
         $iMax = count($parts);
         for ($i = 0; $i < $iMax; $i++) {
 
-            $current = '';
-            $x       = $i;
-            while ($x >= 0) {
-                $current = '/' . $parts[$x] . $current;
-                $x--;
-            }
+            $current = $path->getFullPathFromPart($parts[$i]);
 
             if (array_key_exists($current, $ramlDefinition)) {
                 if ($i === count($parts) - 1) {
                     return $ramlDefinition[$current];
                 } else {
                     return $this->resolvePathPart(
-                        str_replace($current, '', strstr($path, $current)),
+                        $path->getPathAfterPart($current),
                         $ramlDefinition[$current]
                     );
                 }

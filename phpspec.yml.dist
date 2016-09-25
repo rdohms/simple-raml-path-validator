@@ -1,0 +1,4 @@
+suites:
+    raml_validator:
+        namespace: DMS\Raml\PathValidator
+        psr4_prefix: DMS\Raml\PathValidator
